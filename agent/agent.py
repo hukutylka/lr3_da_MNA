@@ -30,7 +30,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 llm = ChatGoogleGenerativeAI(
     model=os.getenv("GEMINI_MODEL"),
     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    temperature=0
+    temperature=0,
+    disable_streaming=True
 )
 
 from langchain.tools import Tool

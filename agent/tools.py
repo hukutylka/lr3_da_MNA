@@ -20,6 +20,7 @@ FORBIDDEN = [
     "unlink("
 ]
 
+
 @tool
 def inspect_data(dataset_id: str) -> str:
     """
@@ -38,6 +39,7 @@ def inspect_data(dataset_id: str) -> str:
 
     return str(report)
 
+
 @tool
 def execute_python(
     dataset_id: str,
@@ -50,7 +52,6 @@ def execute_python(
     """
 
     for forbidden in FORBIDDEN:
-
         if forbidden.lower() in code.lower():
             return f"Blocked: {forbidden}"
 
@@ -62,7 +63,6 @@ def execute_python(
     }
 
     try:
-
         exec(code, {}, local_scope)
 
         if "result" not in local_scope:
@@ -71,9 +71,9 @@ def execute_python(
         return str(local_scope["result"])
 
     except Exception as e:
-
         return f"ERROR: {str(e)}"
-    
+
+
 @tool
 def create_plot(
     dataset_id: str,
@@ -87,27 +87,28 @@ def create_plot(
 
     df = load_dataframe(dataset_id)
 
+    # ensure plots folder exists
+    os.makedirs("plots", exist_ok=True)
+
     local_scope = {
         "df": df,
         "plt": plt
     }
 
     try:
-
         exec(code, {}, local_scope)
 
-        filename = os.path.abspath(
-            f"plots/{uuid.uuid4()}.png"
-    )
-        plt.savefig(
-            filename,
-            bbox_inches="tight"
-        )
+        # if code created a variable 'filename' use it, else create a new file
+        filename = local_scope.get("filename")
+        if not filename:
+            filename = os.path.abspath(f"plots/{uuid.uuid4()}.png")
+
+        # if a figure was produced via plt, save current figure
+        plt.savefig(filename, bbox_inches="tight")
 
         plt.close()
 
         return filename
 
     except Exception as e:
-
         return f"ERROR: {str(e)}"

@@ -8,6 +8,8 @@ DATASET_FOLDER = "uploads"
 def save_dataframe(file, dataset_id):
 
     ext = file.name.split(".")[-1]
+    # ensure uploads folder exists
+    os.makedirs(DATASET_FOLDER, exist_ok=True)
 
     path = f"{DATASET_FOLDER}/{dataset_id}.{ext}"
 
