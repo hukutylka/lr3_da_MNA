@@ -20,26 +20,9 @@
 
 Архитектура и логика работы
 ---------------------------
-Схема архитектуры <br>
-Пользователь<br>
-      │<br>
-      ▼<br>
- Streamlit<br>
-      │<br>
-      ▼<br>
- Gemini Agent<br>
-      │<br>
- ┌────┼──────────┐<br>
- ▼    ▼          ▼<br>
-Inspect Python  Plot<br>
- Tool   Tool    Tool<br>
-      │<br>
-      ▼<br>
- Pandas DataFrame<br>
-      │<br>
-      ▼<br>
- Отчет + графики<br>
- 
+Схема архитектуры
+<img width="172" height="355" alt="image" src="https://github.com/user-attachments/assets/bf502a1f-4c44-43df-a89b-d54cbf63fb27" />
+
 Пользователь загружает CSV или XLSX файл через Streamlit (app.py) и описывает задачу на естественном языке, например, "Найди закономерности и аномалии".
 При нажатии кнопки файл передаётся в run_agent как объект UploadedFile.
 В файле graph.py agent/ файл сохраняется в папке uploads/ с помощью utils/dataframe_store.save_dataframe, формируется имя датасета и создаётся SYSTEM_PROMPT – инструкции для агента.
