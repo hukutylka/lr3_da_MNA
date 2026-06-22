@@ -20,7 +20,7 @@
 
 Архитектура и логика работы
 ---------------------------
-Схема архитектуры
+Схема архитектуры <br>
 <img width="172" height="355" alt="image" src="https://github.com/user-attachments/assets/bf502a1f-4c44-43df-a89b-d54cbf63fb27" />
 
 Пользователь загружает CSV или XLSX файл через Streamlit (app.py) и описывает задачу на естественном языке, например, "Найди закономерности и аномалии".
@@ -58,22 +58,26 @@ create_plot сохраняет графики в папку plots/ и возвр
 └── README.md
 ```
 ## Примеры выполнения
-### Запуск с пустым промптом на датасете цен на жилье
+Запуск с пустым промптом на датасете цен на жилье
+---------------------------
 <img width="1792" height="1058" alt="image" src="https://github.com/user-attachments/assets/492f3914-385f-4441-88fd-ccde3e46a0f4" />
 <img width="1799" height="682" alt="image" src="https://github.com/user-attachments/assets/dbe0bbcb-a716-474b-8fb7-3d85c4b8c1ad" />
 
-### Запуск с промптом на датасете цен на жилье
+Запуск с промптом на датасете цен на жилье
+---------------------------
 <img width="1762" height="821" alt="image" src="https://github.com/user-attachments/assets/b0a9d298-6aae-4873-ba22-7a10c52f956d" />
 <img width="1747" height="950" alt="image" src="https://github.com/user-attachments/assets/fcab9c4f-d849-4c3c-b7ce-6a4fbdffee05" />
 <img width="862" height="701" alt="image" src="https://github.com/user-attachments/assets/2dcdbdc6-95c4-4fc4-a8f7-f24cfe4bd8d3" />
 
-### Запуск на датасете с ценами на страховку
+Запуск на датасете с ценами на страховку
+---------------------------
 <img width="988" height="927" alt="image" src="https://github.com/user-attachments/assets/74fda02f-d2ed-4ebb-9597-8d0306f41812" />
 <img width="990" height="677" alt="image" src="https://github.com/user-attachments/assets/f4b533fd-def2-4ba5-afb5-eb07aa81c3f9" />
 <img width="977" height="782" alt="image" src="https://github.com/user-attachments/assets/6804536f-6718-438c-91a4-e32b16107672" />
 <img width="1056" height="880" alt="image" src="https://github.com/user-attachments/assets/8deb4f99-4c86-4eb3-90f1-6918e7d512ec" />
 
-### Запуск на датасете со страховкой, но не хватило запросов API 
+Запуск на датасете со страховкой, но не хватило запросов API 
+---------------------------
 <img width="1717" height="911" alt="image" src="https://github.com/user-attachments/assets/72069cdf-4fd9-4769-97a7-b7268b549526" />
 **НО агент смог нарисовать гистограмму с распределением цен**
 <img width="1223" height="691" alt="image" src="https://github.com/user-attachments/assets/75894a38-56b0-4452-9243-6bc2a3fc3e5d" />
