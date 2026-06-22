@@ -1,4 +1,5 @@
 # lr3_da_MNA — AI Data Analyst
+Работа программы приведена в самом внизу
 
 Краткое описание
 ---------------
@@ -19,25 +20,25 @@
 
 Архитектура и логика работы
 ---------------------------
-Схема архитектуры
-Пользователь
-      │
-      ▼
- Streamlit
-      │
-      ▼
- Gemini Agent
-      │
- ┌────┼──────────┐
- ▼    ▼          ▼
-Inspect Python  Plot
- Tool   Tool    Tool
-      │
-      ▼
- Pandas DataFrame
-      │
-      ▼
- Отчет + графики
+Схема архитектуры <br>
+Пользователь<br>
+      │<br>
+      ▼<br>
+ Streamlit<br>
+      │<br>
+      ▼<br>
+ Gemini Agent<br>
+      │<br>
+ ┌────┼──────────┐<br>
+ ▼    ▼          ▼<br>
+Inspect Python  Plot<br>
+ Tool   Tool    Tool<br>
+      │<br>
+      ▼<br>
+ Pandas DataFrame<br>
+      │<br>
+      ▼<br>
+ Отчет + графики<br>
  
 Пользователь загружает CSV или XLSX файл через Streamlit (app.py) и описывает задачу на естественном языке, например, "Найди закономерности и аномалии".
 При нажатии кнопки файл передаётся в run_agent как объект UploadedFile.
