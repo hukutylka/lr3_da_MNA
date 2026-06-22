@@ -1,4 +1,4 @@
-<img width="1717" height="911" alt="image" src="https://github.com/user-attachments/assets/6f014242-795a-45da-ba92-5d8db8468315" /># lr3_da_MNA — AI Data Analyst
+# lr3_da_MNA — AI Data Analyst
 
 Краткое описание
 ---------------
