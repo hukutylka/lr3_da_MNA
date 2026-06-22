@@ -96,8 +96,9 @@ def create_plot(
 
         exec(code, {}, local_scope)
 
-        filename = f"plots/{uuid.uuid4()}.png"
-
+        filename = os.path.abspath(
+            f"plots/{uuid.uuid4()}.png"
+    )
         plt.savefig(
             filename,
             bbox_inches="tight"

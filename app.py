@@ -1,88 +1,159 @@
 import os
-import uuid
-import streamlit as st
 
-from utils.security import validate_prompt
-from utils.dataframe_store import save_dataframe
+import streamlit as st
 
 from agent.graph import run_agent
 
+
+# ==========================
+# Page
+# ==========================
 
 st.set_page_config(
     page_title="AI Data Analyst",
     layout="wide"
 )
 
-st.title("📊 AI Data Analyst Agent")
+
+st.title(
+    "🤖 AI Data Analyst"
+)
+
 
 st.write(
-    """
-Загрузите CSV или Excel файл.
-Укажите задачу анализа.
-Агент самостоятельно исследует данные,
-вызовет Python-инструменты и построит графики.
-"""
+    "Загрузите CSV/XLSX и получите AI-анализ"
 )
+
+
+
+# ==========================
+# Upload
+# ==========================
 
 uploaded_file = st.file_uploader(
     "Dataset",
-    type=["csv", "xlsx"]
+    type=[
+        "csv",
+        "xlsx"
+    ]
 )
 
-user_instruction = st.text_area(
-    "Инструкция для агента",
-    placeholder="""
-Примеры:
 
-Найди основные факторы влияющие на продажи.
 
-Найди аномалии.
-
-Построй полезные графики.
-
-Проанализируй клиентов и сегменты.
+task = st.text_area(
+    "Что нужно найти?",
+    value=
+    """
+Проведи полный анализ.
+Найди закономерности,
+аномалии и сделай выводы.
 """
 )
 
-if st.button("Запустить анализ"):
 
-    if uploaded_file is None:
-        st.error("Загрузите файл")
-        st.stop()
 
-    if not validate_prompt(user_instruction):
-        st.error("Запрос заблокирован системой безопасности")
-        st.stop()
+# ==========================
+# Run
+# ==========================
 
-    try:
+if uploaded_file:
 
-        dataset_id = str(uuid.uuid4())
 
-        save_dataframe(
-            uploaded_file,
-            dataset_id
-        )
+    dataset_id = uploaded_file.name
 
-        with st.spinner("Агент анализирует данные..."):
+
+    st.success(
+        "Файл загружен"
+    )
+
+
+    if st.button(
+        "Запустить анализ"
+    ):
+
+
+        with st.spinner(
+            "AI анализирует данные..."
+        ):
+
 
             result = run_agent(
-                dataset_id=dataset_id,
-                user_request=user_instruction
+                uploaded_file,
+                task
             )
 
-        st.success("Анализ завершен")
 
-        st.markdown(result["report"])
+        st.success(
+            "Анализ завершен"
+        )
 
-        if result["plots"]:
 
-            st.subheader("Графики")
+        # ==================
+        # Report
+        # ==================
 
-            for plot_path in result["plots"]:
+        st.header(
+            "📄 Отчет"
+        )
 
-                if os.path.exists(plot_path):
-                    st.image(plot_path)
 
-    except Exception as e:
+        report = result.get(
+            "report",
+            ""
+        )
 
-        st.exception(e)
+
+        if report:
+
+            st.markdown(
+                report
+            )
+
+        else:
+
+            st.warning(
+                "Отчет пустой. Проверьте логи агента."
+            )
+
+
+
+        # ==================
+        # Plots
+        # ==================
+
+        st.header(
+            "📊 Графики"
+        )
+
+
+        plots = result.get(
+            "plots",
+            []
+        )
+
+
+        if plots:
+
+            for plot in plots:
+
+
+                if os.path.exists(plot):
+
+                    st.image(
+                        plot,
+                        caption="AI generated plot",
+                        use_container_width=True
+                    )
+
+                else:
+
+                    st.warning(
+                        f"Файл графика не найден: {plot}"
+                    )
+
+
+        else:
+
+            st.info(
+                "Графики не были созданы"
+            )
