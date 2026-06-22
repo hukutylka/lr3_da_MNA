@@ -1,4 +1,4 @@
-# lr3_da_MNA — AI Data Analyst
+<img width="1717" height="911" alt="image" src="https://github.com/user-attachments/assets/6f014242-795a-45da-ba92-5d8db8468315" /># lr3_da_MNA — AI Data Analyst
 
 Краткое описание
 ---------------
@@ -19,16 +19,35 @@
 
 Архитектура и логика работы
 ---------------------------
-
-1. Пользователь загружает CSV/XLSX через Streamlit (`app.py`) и вводит задачу на языке (например, "Найди закономерности и аномалии").
-2. При нажатии кнопки файл передаётся в `run_agent` как объект `UploadedFile`.
-3. `agent/graph.py` сохраняет этот файл в папку `uploads/` (через `utils/dataframe_store.save_dataframe`), формирует имя датасета и создаёт SYSTEM_PROMPT — инструкции для агента.
-4. Агент (`langgraph` + LLM) получает задачу и планирует последовательность действий, вызывая зарегистрированные инструменты (`inspect_data`, `execute_python`, `create_plot`).
-   - `inspect_data` возвращает обзор структуры набора данных;
-   - если агент сочтёт нужным, он сгенерирует код для `execute_python` (для расчёта метрик/корреляций/группировок) и/или код для `create_plot` (matplotlib) для визуализаций.
-5. `create_plot` сохраняет графики в папку `plots/` и возвращает абсолютные пути к файлам.
-6. `agent/graph.py` собирает ответы агента, выбирает наиболее содержательное сообщение как итоговый `report` и формирует список новых графиков, созданных в ходе текущего запуска (мы фиксируем существующие файлы в `plots/` до запуска и возвращаем только файлы, появившиеся после запуска, чтобы не показывать старые артефакты).
-7. Если LLM возвращает шаблонный или неполный отчёт (например: "В данный момент метрики не рассчитаны"), система запускает локальный fallback-анализ: вызывает `inspect_data`, выполняет локальный `execute_python` с безопасным кодом (describe для числовых колонок) и создаёт простую гистограмму для первой числовой колонки. Это гарантирует, что пользователь получает подробный отчёт даже при слабом ответе LLM.
+Схема архитектуры
+Пользователь
+      │
+      ▼
+ Streamlit
+      │
+      ▼
+ Gemini Agent
+      │
+ ┌────┼──────────┐
+ ▼    ▼          ▼
+Inspect Python  Plot
+ Tool   Tool    Tool
+      │
+      ▼
+ Pandas DataFrame
+      │
+      ▼
+ Отчет + графики
+ 
+Пользователь загружает CSV или XLSX файл через Streamlit (app.py) и описывает задачу на естественном языке, например, "Найди закономерности и аномалии".
+При нажатии кнопки файл передаётся в run_agent как объект UploadedFile.
+В файле graph.py agent/ файл сохраняется в папке uploads/ с помощью utils/dataframe_store.save_dataframe, формируется имя датасета и создаётся SYSTEM_PROMPT – инструкции для агента.
+Агент (langgraph + LLM) получает задачу, планирует действия и вызывает зарегистрированные инструменты: inspect_data, execute_python, create_plot.
+* inspect_data предоставляет обзор структуры данных.
+Если нужно, агент генерирует код для execute_python (для расчёта метрик, корреляций, группировок) и/или create_plot (matplotlib) для визуализация.
+create_plot сохраняет графики в папку plots/ и возвращает пути к файлам.
+В graph.py agent/ собираются ответы агента, выбирается наиболее содержательное сообщение как итоговый report и формируется список новых графиков, созданных в этом запуске. Мы фиксируем существующие файлы в plots/ до запуска и возвращаем только новые, чтобы не показывать старые.
+Если LLM даёт шаблонный или неполный отчёт, система запускает локальный fallback-анализ: inspect_data, execute_python с безопасным кодом (describe для числовых колонок), создаёт простую гистограмму для первой числовой колонки. Это обеспечивает подробный отчёт даже при слабом ответе LLM.
 
 Безопасность
 ------------
@@ -54,4 +73,23 @@
 ├── docker-compose.yml
 └── README.md
 ```
+## Примеры выполнения
+### Запуск с пустым промптом на датасете цен на жилье
+<img width="1792" height="1058" alt="image" src="https://github.com/user-attachments/assets/492f3914-385f-4441-88fd-ccde3e46a0f4" />
+<img width="1799" height="682" alt="image" src="https://github.com/user-attachments/assets/dbe0bbcb-a716-474b-8fb7-3d85c4b8c1ad" />
 
+### Запуск с промптом на датасете цен на жилье
+<img width="1762" height="821" alt="image" src="https://github.com/user-attachments/assets/b0a9d298-6aae-4873-ba22-7a10c52f956d" />
+<img width="1747" height="950" alt="image" src="https://github.com/user-attachments/assets/fcab9c4f-d849-4c3c-b7ce-6a4fbdffee05" />
+<img width="862" height="701" alt="image" src="https://github.com/user-attachments/assets/2dcdbdc6-95c4-4fc4-a8f7-f24cfe4bd8d3" />
+
+### Запуск на датасете с ценами на страховку
+<img width="988" height="927" alt="image" src="https://github.com/user-attachments/assets/74fda02f-d2ed-4ebb-9597-8d0306f41812" />
+<img width="990" height="677" alt="image" src="https://github.com/user-attachments/assets/f4b533fd-def2-4ba5-afb5-eb07aa81c3f9" />
+<img width="977" height="782" alt="image" src="https://github.com/user-attachments/assets/6804536f-6718-438c-91a4-e32b16107672" />
+<img width="1056" height="880" alt="image" src="https://github.com/user-attachments/assets/8deb4f99-4c86-4eb3-90f1-6918e7d512ec" />
+
+### Запуск на датасете со страховкой, но не хватило запросов API 
+<img width="1717" height="911" alt="image" src="https://github.com/user-attachments/assets/72069cdf-4fd9-4769-97a7-b7268b549526" />
+**НО агент смог нарисовать гистограмму с распределением цен**
+<img width="1223" height="691" alt="image" src="https://github.com/user-attachments/assets/75894a38-56b0-4452-9243-6bc2a3fc3e5d" />
